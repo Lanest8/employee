@@ -24,7 +24,6 @@ public class EmployeeControllerTest {
     void should_return_create_employee_when_post() throws Exception {
         String requestBody = """
                 {
-                    "id":1,
                     "name":"John Smith",
                     "age":32,
                     "gender":"Male",
