@@ -28,6 +28,21 @@ public class CompanyControllerTest {
     }
 
     @Test
+    void should_return_company_list_when_get_company() throws Exception {
+        Company expect = controller.create(new Company(null, "oocl1", "珠海"));
+        controller.create(new Company(null, "oocl2", "珠海"));
+        MockHttpServletRequestBuilder request = get("/companies")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(expect.id()))
+                .andExpect(jsonPath("$[0].name").value(expect.name()))
+                .andExpect(jsonPath("$[0].address").value(expect.address()));
+    }
+
+    @Test
     void should_return_create_company_when_post() throws Exception {
         String requestBody = """
                 {
