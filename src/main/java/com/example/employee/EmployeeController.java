@@ -79,12 +79,6 @@ public class EmployeeController {
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable Integer id) {
-        for (int i = 0; i < employees.size(); i++) {
-            Employee employee = employees.get(i);
-            if (Objects.equals(employee.id(), id)) {
-                employees.remove(i);
-                break;
-            }
-        }
+        employees.removeIf(employee -> Objects.equals(employee.id(), id));
     }
 }
