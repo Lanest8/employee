@@ -37,18 +37,28 @@ public class EmployeeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> get(@RequestParam(required = false) String gender) {
-        if (gender == null) {
-            return employees;
+    public List<Employee> get(@RequestParam(required = false) String gender,
+                              @RequestParam(required = false) Integer page,
+                              @RequestParam(required = false) Integer size) {
+        if (gender != null) {
+            return employees.stream()
+                    .filter(e -> e.gender().compareToIgnoreCase(gender) == 0)
+                    .toList();
         }
-        return employees.stream()
-                .filter(e -> e.gender().compareToIgnoreCase(gender) == 0)
-                .toList();
+        if (page != null && size != null) {
+            int start = (page - 1) * size;
+            int end = Math.min(start + size, employees.size());
+            if (start >= employees.size()) {
+                return new ArrayList<>();
+            }
+            return employees.subList(start, end);
+        }
+        return employees;
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateEmployee(@PathVariable Integer id) {
+    public void deleteEmployee(@PathVariable Integer id) {
         for (int i = 0; i < employees.size(); i++) {
             Employee employee = employees.get(i);
             if (Objects.equals(employee.id(), id)) {

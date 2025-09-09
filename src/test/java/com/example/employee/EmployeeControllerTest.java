@@ -132,5 +132,19 @@ public class EmployeeControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void should_return_employee_when_get_employee_with_limit() throws Exception {
+        controller.create(new Employee(null, "John Smith", 32, "Male", 5000.0));
+        controller.create(new Employee(null, "John Smith", 30, "Male", 6000.0));
+        controller.create(new Employee(null, "John Smith", 31, "Male", 7000.0));
+        controller.create(new Employee(null, "John Smith", 34, "Male", 8000.0));
 
+        MockHttpServletRequestBuilder request = get("/employees" + "?page=1&size=2")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+
+    }
 }
