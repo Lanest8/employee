@@ -82,5 +82,16 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$[0].salary").value(expect.salary()));
     }
 
+    @Test
+    void should_return_employees_list_when_list_by_male() throws Exception {
+        controller.create(new Employee(null, "John Smith", 32, "Male", 5000.0));
+        controller.create(new Employee(null, "Lily", 22, "Female", 5000.0));
+        MockHttpServletRequestBuilder request = get("/employees")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+    }
+
 
 }

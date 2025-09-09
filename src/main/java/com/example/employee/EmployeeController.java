@@ -37,6 +37,9 @@ public class EmployeeController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> get(@RequestParam(required = false) String gender) {
+        if (gender == null) {
+            return employees;
+        }
         return employees.stream()
                 .filter(e -> e.gender().compareToIgnoreCase(gender) == 0)
                 .toList();
