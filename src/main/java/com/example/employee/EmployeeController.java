@@ -56,6 +56,26 @@ public class EmployeeController {
         return employees;
     }
 
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee updatedEmployee) {
+        for (int i = 0; i < employees.size(); i++) {
+            Employee employee = employees.get(i);
+            if (Objects.equals(employee.id(), id)) {
+                Employee newEmployee = new Employee(
+                        id,
+                        updatedEmployee.name(),
+                        updatedEmployee.age(),
+                        updatedEmployee.gender(),
+                        updatedEmployee.salary()
+                );
+                employees.set(i, newEmployee);
+                return newEmployee;
+            }
+        }
+        return null;
+    }
+
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable Integer id) {
