@@ -46,23 +46,15 @@ public class EmployeeController {
                 .toList();
     }
 
-    @PutMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee updatedEmployee) {
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateEmployee(@PathVariable Integer id) {
         for (int i = 0; i < employees.size(); i++) {
             Employee employee = employees.get(i);
             if (Objects.equals(employee.id(), id)) {
-                Employee newEmployee = new Employee(
-                        id,
-                        updatedEmployee.name(),
-                        updatedEmployee.age(),
-                        updatedEmployee.gender(),
-                        updatedEmployee.salary()
-                );
-                employees.set(i, newEmployee);
-                return newEmployee;
+                employees.remove(i);
+                break;
             }
         }
-        return null;
     }
 }
