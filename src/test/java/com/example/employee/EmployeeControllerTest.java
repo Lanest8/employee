@@ -17,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private EmployeeController controller;
 
     @Test
     void should_return_create_employee_when_post() throws Exception {
@@ -40,6 +42,23 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.age").value("32"))
                 .andExpect(jsonPath("$.gender").value("Male"))
                 .andExpect(jsonPath("$.salary").value("5000.0"));
-
     }
+
+    @Test
+    void should_return_employee_when_get_employee_with_id_exist() throws Exception {
+        Employee employee = new Employee(null, "John Smith", 32, "Male", 5000.0);
+        Employee expect = controller.create(employee);
+        MockHttpServletRequestBuilder request = get("/employees/" + expect.id())
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(expect.id()))
+                .andExpect(jsonPath("$.name").value(expect.name()))
+                .andExpect(jsonPath("$.age").value(expect.age()))
+                .andExpect(jsonPath("$.gender").value(expect.gender()))
+                .andExpect(jsonPath("$.salary").value(expect.salary()));
+    }
+
+
 }
