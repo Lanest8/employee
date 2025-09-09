@@ -138,13 +138,15 @@ public class EmployeeControllerTest {
         controller.create(new Employee(null, "John Smith", 30, "Male", 6000.0));
         controller.create(new Employee(null, "John Smith", 31, "Male", 7000.0));
         controller.create(new Employee(null, "John Smith", 34, "Male", 8000.0));
+        controller.create(new Employee(null, "John Smith", 36, "Male", 9000.0));
+        controller.create(new Employee(null, "John Smith", 38, "Male", 10000.0));
 
-        MockHttpServletRequestBuilder request = get("/employees" + "?page=1&size=2")
+        MockHttpServletRequestBuilder request = get("/employees" + "?page=1&size=5")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+                .andExpect(jsonPath("$.length()").value(5));
 
     }
 }
