@@ -25,4 +25,13 @@ public class CompanyController {
         return newCompany;
     }
 
+    @GetMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Company get(@PathVariable int id) {
+        return companies.stream()
+                .filter(company -> company.id() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
 }
