@@ -60,21 +60,21 @@ public class EmployeeController {
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee updatedEmployee) {
-        for (int i = 0; i < employees.size(); i++) {
-            Employee employee = employees.get(i);
-            if (Objects.equals(employee.id(), id)) {
-                Employee newEmployee = new Employee(
-                        id,
-                        updatedEmployee.name(),
-                        updatedEmployee.age(),
-                        updatedEmployee.gender(),
-                        updatedEmployee.salary()
-                );
-                employees.set(i, newEmployee);
-                return newEmployee;
-            }
-        }
-        return null;
+        return employees.stream()
+                .filter(employee -> Objects.equals(employee.id(), id))
+                .findFirst()
+                .map(originalEmployee -> {
+                    Employee newEmployee = new Employee(
+                            id,
+                            updatedEmployee.name(),
+                            updatedEmployee.age(),
+                            updatedEmployee.gender(),
+                            updatedEmployee.salary()
+                    );
+                    employees.set(employees.indexOf(originalEmployee), newEmployee);
+                    return newEmployee;
+                })
+                .orElse(null);
     }
 
     @DeleteMapping("{id}")
