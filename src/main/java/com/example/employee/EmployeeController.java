@@ -40,8 +40,9 @@ public class EmployeeController {
     public List<Employee> get(@RequestParam(required = false) String gender,
                               @RequestParam(required = false) Integer page,
                               @RequestParam(required = false) Integer size) {
+        List<Employee> result = new ArrayList<>(employees);
         if (gender != null) {
-            return employees.stream()
+            result = employees.stream()
                     .filter(e -> e.gender().compareToIgnoreCase(gender) == 0)
                     .toList();
         }
@@ -51,9 +52,9 @@ public class EmployeeController {
             if (start >= employees.size()) {
                 return new ArrayList<>();
             }
-            return employees.subList(start, end);
+            result = employees.subList(start, end);
         }
-        return employees;
+        return result;
     }
 
     @PutMapping("{id}")
