@@ -68,4 +68,9 @@ public class CompanyController {
                 .orElse(null);
     }
 
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable Integer id) {
+        companies.removeIf(company -> Objects.equals(company.id(), id));
+    }
 }

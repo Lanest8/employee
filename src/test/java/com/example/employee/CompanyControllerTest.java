@@ -116,4 +116,16 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$.address").value("香港"));
     }
 
+    @Test
+    void should_return_employee_when_delete_an_employee() throws Exception {
+        Company company = controller.create(new Company(null, "oocl1", "珠海"));
+        int id = company.id();
+
+        MockHttpServletRequestBuilder request = delete("/companies/" + id)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
+    }
+
 }
