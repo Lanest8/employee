@@ -9,8 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -92,6 +91,29 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.name").value("oocl"))
                 .andExpect(jsonPath("$.address").value("珠海"));
+    }
+
+    @Test
+    void should_return_company_when_update_an_employee() throws Exception {
+        Company company = controller.create(new Company(null, "oocl1", "珠海"));
+        int id = company.id();
+
+        String updateRequestBody = """
+                {
+                    "name": "oocl2",
+                    "address": "香港"
+                }
+                """;
+
+        MockHttpServletRequestBuilder request = put("/companies/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateRequestBody);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.name").value("oocl2"))
+                .andExpect(jsonPath("$.address").value("香港"));
     }
 
 }

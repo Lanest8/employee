@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/companies")
@@ -47,6 +48,24 @@ public class CompanyController {
             result = companies.subList(start, end);
         }
         return result;
+    }
+
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Company updateEmployee(@PathVariable Integer id, @RequestBody Company company) {
+        return companies.stream()
+                .filter(c -> Objects.equals(c.id(), id))
+                .findFirst()
+                .map(originalCompany -> {
+                    Company newCompany = new Company(
+                            id,
+                            company.name(),
+                            company.address()
+                    );
+                    companies.set(companies.indexOf(originalCompany), newCompany);
+                    return newCompany;
+                })
+                .orElse(null);
     }
 
 }
