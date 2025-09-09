@@ -34,4 +34,19 @@ public class CompanyController {
                 .orElse(null);
     }
 
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<Company> get(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size) {
+        List<Company> result = new ArrayList<>(companies);
+        if (page != null && size != null) {
+            int start = (page - 1) * size;
+            int end = Math.min(start + size, companies.size());
+            if (start >= companies.size()) {
+                return new ArrayList<>();
+            }
+            result = companies.subList(start, end);
+        }
+        return result;
+    }
+
 }

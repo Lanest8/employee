@@ -60,4 +60,22 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$.address").value("珠海"));
     }
 
+    @Test
+    void should_return_company_when_get_company_with_limit() throws Exception {
+        controller.create(new Company(null, "oocl1", "珠海"));
+        controller.create(new Company(null, "oocl2", "珠海"));
+        controller.create(new Company(null, "oocl3", "珠海"));
+        controller.create(new Company(null, "oocl4", "珠海"));
+        controller.create(new Company(null, "oocl5", "珠海"));
+        controller.create(new Company(null, "oocl6", "珠海"));
+
+        MockHttpServletRequestBuilder request = get("/companies" + "?page=1&size=5")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(5));
+
+    }
+
 }
