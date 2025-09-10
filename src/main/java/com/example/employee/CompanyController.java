@@ -10,7 +10,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private List<Company> companies = new ArrayList<>();
+    private final List<Company> companies = new ArrayList<>();
     private int id = 0;
 
     public void clear() {
